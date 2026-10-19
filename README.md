@@ -183,6 +183,197 @@ const styles = StyleSheet.create({
 Agora temos duas telas, mas ainda precisamos conectá-las por meio de um
 navegador.
 
+## Extra: dois exemplos com `styled-components`
+
+O `StyleSheet` do React Native é uma opção válida para organizar estilos.
+Outra alternativa é o **styled-components**, que permite criar componentes
+visuais com estilos associados a eles. Os exemplos abaixo usam a versão
+para React Native, importada de `styled-components/native`.
+
+### Instalar a biblioteca
+
+Na pasta do projeto, execute:
+
+```bash
+npm install styled-components
+```
+
+Se o projeto estiver usando uma versão do TypeScript que precise de tipos
+separados para a integração com React Native, consulte a documentação da
+versão instalada e adicione os tipos correspondentes. Depois da instalação,
+reinicie o servidor Expo se ele já estiver aberto.
+
+### Exemplo 1 — Criar uma tela estilizada
+
+Crie `screens/StyledHomeScreen.tsx`:
+
+```tsx
+import styled from 'styled-components/native';
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background-color: #f3f6fb;
+`;
+
+const Title = styled.Text`
+  color: #172554;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+`;
+
+const Description = styled.Text`
+  color: #475569;
+  font-size: 16px;
+  text-align: center;
+`;
+
+export default function StyledHomeScreen() {
+  return (
+    <Container>
+      <Title>Olá, React Navigation!</Title>
+      <Description>
+        Esta tela usa styled-components para definir sua aparência.
+      </Description>
+    </Container>
+  );
+}
+```
+
+**O que observar:** em vez de criar um objeto com `StyleSheet.create`,
+criamos componentes como `Container`, `Title` e `Description`. As propriedades
+CSS são escritas em um bloco de texto, mas devem respeitar as propriedades
+suportadas pelo React Native — não todas as propriedades de CSS para web.
+
+Para usar essa tela no Stack, importe o componente no arquivo `App.tsx` e
+adicione uma rota ao tipo de rotas e ao navegador, por exemplo:
+
+```tsx
+// No tipo RootStackParamList:
+TelaEstilizada: undefined;
+
+// Junto aos imports:
+import StyledHomeScreen from './screens/StyledHomeScreen';
+
+// Dentro de Stack.Navigator:
+<Stack.Screen
+  name="TelaEstilizada"
+  component={StyledHomeScreen}
+  options={{ title: 'Tela estilizada' }}
+/>
+```
+
+### Exemplo 2 — Criar um cartão reutilizável e um botão
+
+Crie `components/InfoCard.tsx` (crie a pasta `components` caso ainda não
+exista):
+
+```tsx
+import styled from 'styled-components/native';
+
+type CardProps = {
+  destaque?: boolean;
+};
+
+const Card = styled.View<CardProps>`
+  padding: 20px;
+  margin: 16px;
+  border-radius: 12px;
+  background-color: ${({ destaque }) =>
+    destaque ? '#dbeafe' : '#ffffff'};
+  border-width: 1px;
+  border-color: ${({ destaque }) =>
+    destaque ? '#2563eb' : '#cbd5e1'};
+`;
+
+const CardTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #0f172a;
+  margin-bottom: 8px;
+`;
+
+const CardDescription = styled.Text`
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 16px;
+`;
+
+const ActionButton = styled.Pressable`
+  background-color: #2563eb;
+  padding: 12px;
+  border-radius: 8px;
+  align-items: center;
+`;
+
+const ActionButtonText = styled.Text`
+  color: #ffffff;
+  font-weight: bold;
+`;
+
+type InfoCardProps = {
+  title: string;
+  description: string;
+  destaque?: boolean;
+  onPress: () => void;
+};
+
+export default function InfoCard({
+  title,
+  description,
+  destaque = false,
+  onPress,
+}: InfoCardProps) {
+  return (
+    <Card destaque={destaque}>
+      <CardTitle>{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+      <ActionButton onPress={onPress} accessibilityRole="button">
+        <ActionButtonText>Abrir detalhes</ActionButtonText>
+      </ActionButton>
+    </Card>
+  );
+}
+```
+
+Agora use o cartão em uma tela, por exemplo em `screens/DetailsScreen.tsx`:
+
+```tsx
+import { Alert, ScrollView } from 'react-native';
+import InfoCard from '../components/InfoCard';
+
+export default function DetailsScreen() {
+  return (
+    <ScrollView>
+      <InfoCard
+        title="React Navigation"
+        description="Organize o aplicativo em telas e rotas."
+        destaque
+        onPress={() => Alert.alert('Detalhes', 'Você pressionou o botão!')}
+      />
+
+      <InfoCard
+        title="Styled-components"
+        description="Reutilize componentes visuais em diferentes telas."
+        onPress={() => Alert.alert('Estilos', 'Este cartão não está destacado.')}
+      />
+    </ScrollView>
+  );
+}
+```
+
+**O que observar:**
+
+- `Card`, `CardTitle` e `ActionButton` são componentes reutilizáveis.
+- A propriedade `destaque` altera dinamicamente a cor de fundo e a borda.
+- `onPress` permite que a tela que usa o cartão decida o que acontece ao
+  pressionar o botão.
+- `Alert.alert` é apenas uma demonstração; você também pode passar uma
+  função que usa `navigation.navigate(...)` para abrir outra rota.
+
 ------------------------------------------------------------------------
 
 # Parte 3 --- Construir Native Stack
