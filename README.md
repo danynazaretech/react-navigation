@@ -1,120 +1,183 @@
-# React Native + React Navigation: do zero à navegação
+# React Navigation: 6 exemplos de navegadores
 
-Tutorial prático para estudantes. Vamos criar um projeto novo, instalar
-as dependências, criar telas e construir Stack, Bottom Tabs, Top Tabs e
-Drawer. Também vamos explicar o que é necessário para Native Bottom
-Tabs.
+Projeto didático Expo + TypeScript com exemplos independentes de:
 
-## Objetivos
+1. Stack (JS stack)
+2. Native Stack
+3. Drawer
+4. Bottom Tabs
+5. Native Bottom Tabs
+6. Top Tabs
 
-Ao terminar, você deverá conseguir:
+## Criar projeto limpo
 
--   preparar o ambiente com Node.js, VS Code e Expo;
--   criar um aplicativo React Native com TypeScript;
--   construir telas separadas;
--   navegar entre telas com Native Stack;
--   construir navegação por abas inferiores e superiores;
--   criar um menu lateral;
--   entender os requisitos específicos de Native Bottom Tabs.
-
-------------------------------------------------------------------------
-
-# Parte 1 --- Preparar o ambiente
-
-## 1. Instalar Node.js
-
-Acesse [nodejs.org](https://nodejs.org/) e instale a versão LTS.
-
-O Node.js permite executar ferramentas JavaScript. O npm, que instala as
-bibliotecas do projeto, é instalado junto com ele.
-
-Abra um terminal e confira:
-
-``` bash
-node -v
-npm -v
+```bash
+npx create-expo-app@latest ReactNavigationDemo --template blank-typescript
+cd ReactNavigationDemo
 ```
 
-Se os dois comandos mostrarem números de versão, a instalação básica
-está funcionando.
+Copie `App.tsx`, `screens/` e `navigators/` deste pacote para a pasta do projeto.
 
-## 2. Instalar Visual Studio Code
+## Instalar dependências base
 
-Baixe o editor em
-[code.visualstudio.com](https://code.visualstudio.com/).
-
-Abra o VS Code e selecione **Terminal → Novo Terminal**. Vamos usar esse
-terminal para executar os comandos.
-
-## 3. Criar o projeto Expo com TypeScript
-
-No terminal, execute:
-
-``` bash
-npx create-expo-app@latest NavegacaoAula --template blank-typescript
-```
-
-Entre na pasta:
-
-``` bash
-cd NavegacaoAula
-```
-
-Se o comando estiver disponível, abra a pasta atual no VS Code:
-
-``` bash
-code .
-```
-
-Caso `code .` não funcione, abra a pasta manualmente no VS Code usando
-**Arquivo → Abrir Pasta**.
-
-A pasta correta é aquela que contém `package.json`.
-
-> O modelo `blank-typescript` cria um projeto inicial simples. Se o
-> comando do template tiver mudado na versão do Expo instalada, consulte
-> [Create a
-> project](https://docs.expo.dev/get-started/create-a-project/).
-
-------------------------------------------------------------------------
-
-# Parte 2 --- Instalar React Navigation
-
-## 4. Instalar o núcleo e o Native Stack
-
-Dentro da pasta `NavegacaoAula`, execute:
-
-``` bash
-npm install @react-navigation/native @react-navigation/native-stack
-```
-
-Depois, instale as dependências nativas compatíveis com o Expo:
-
-``` bash
+```bash
+npm install @react-navigation/native
 npx expo install react-native-screens react-native-safe-area-context
 ```
 
--   `@react-navigation/native`: núcleo da navegação.
--   `@react-navigation/native-stack`: navegador de pilha com recursos
-    nativos.
--   `react-native-screens`: integração com telas nativas.
--   `react-native-safe-area-context`: ajuda a respeitar as áreas seguras
-    da tela.
+## Instalar os navegadores
 
-## 5. Criar a primeira tela
+```bash
+npm install @react-navigation/stack
+npm install @react-navigation/native-stack
+npm install @react-navigation/drawer
+npm install @react-navigation/bottom-tabs
+npm install @react-navigation/native-bottom-tabs
+npm install @react-navigation/material-top-tabs
+npx expo install react-native-gesture-handler react-native-reanimated react-native-pager-view
+```
 
-Crie uma pasta chamada `screens`. Dentro dela, crie `HomeScreen.tsx`:
+Siga também as instruções específicas e compatíveis com a versão do Expo SDK / React Navigation instalada:
+- https://reactnavigation.org/docs/getting-started/
+- https://reactnavigation.org/docs/stack-navigator/
+- https://reactnavigation.org/docs/native-stack-navigator/
+- https://reactnavigation.org/docs/drawer-navigator/
+- https://reactnavigation.org/docs/bottom-tab-navigator/
+- https://reactnavigation.org/docs/native-bottom-tab-navigator/
+- https://reactnavigation.org/docs/material-top-tab-navigator/
 
-``` tsx
+> Observação: Native Bottom Tabs depende de versões compatíveis de React Navigation e `react-native-screens`; confira a documentação do seu SDK. No Android, a implementação nativa limita a barra a cinco abas.
+
+## Executar
+
+```bash
+npx expo start
+```
+
+Na tela inicial do exemplo, selecione um navegador para experimentar.
+
+## Conceitos comparados
+
+- **Stack**: pilha com transições controladas pelo JavaScript.
+- **Native Stack**: pilha baseada em componentes nativos do sistema.
+- **Drawer**: menu lateral.
+- **Bottom Tabs**: abas inferiores desenhadas pelo React Navigation.
+- **Native Bottom Tabs**: abas inferiores com implementação nativa.
+- **Top Tabs**: abas superiores, normalmente com gesto de deslizar entre páginas.
+
+
+# 6. Exemplo de navegação com Top Tabs no React Native
+
+## 1. Objetivo
+
+Implementar uma navegação por abas posicionadas na parte superior da tela, utilizando a biblioteca React Navigation em um projeto React Native com Expo e TypeScript.
+
+O navegador **Top Tabs** permite alternar entre diferentes telas selecionando abas localizadas na parte superior da interface. Dependendo da configuração, também é possível navegar entre elas deslizando o dedo horizontalmente.
+
+## 2. Instalar a biblioteca
+
+No terminal, dentro da pasta do projeto, execute:
+
+```bash
+npm install @react-navigation/material-top-tabs
+npx expo install react-native-pager-view
+```
+
+O pacote `@react-navigation/material-top-tabs` implementa a navegação por abas superiores, enquanto `react-native-pager-view` fornece o mecanismo de paginação entre as telas.
+
+## 3. Criar o arquivo do navegador
+
+Dentro da pasta `navigators`, crie o arquivo:
+
+```text
+navigators/TopTabsExample.tsx
+```
+
+Adicione o seguinte código:
+
+```tsx
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from
+  '@react-navigation/material-top-tabs';
+
+import DemoScreen from '../screens/DemoScreen';
+
+// Cria o navegador de abas superiores
+const Tab = createMaterialTopTabNavigator();
+
+export default function TopTabsExample() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: '#ffffff',
+          tabBarInactiveTintColor: '#cccccc',
+          tabBarStyle: {
+            backgroundColor: '#2f9e41',
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: '#ffffff',
+          },
+        }}
+      >
+        <Tab.Screen
+          name="Inicio"
+          component={DemoScreen}
+          initialParams={{
+            title: 'Início',
+            description: 'Tela inicial do aplicativo',
+          }}
+        />
+
+        <Tab.Screen
+          name="Producao"
+          component={DemoScreen}
+          initialParams={{
+            title: 'Produção',
+            description: 'Informações sobre a produção de café',
+          }}
+        />
+
+        <Tab.Screen
+          name="Mercado"
+          component={DemoScreen}
+          initialParams={{
+            title: 'Mercado',
+            description: 'Informações sobre o mercado de café',
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+```
+
+**Observação:** esse exemplo utiliza o componente `DemoScreen` compartilhado com os outros navegadores do projeto. Para exibir títulos e descrições diferentes, ele precisa ler esses valores de `route.params`.
+
+## 4. Conferir o componente DemoScreen
+
+No arquivo `screens/DemoScreen.tsx`, utilize uma implementação semelhante a esta:
+
+```tsx
 import { View, Text, StyleSheet } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 
-export default function HomeScreen() {
+type DemoParams = {
+  title?: string;
+  description?: string;
+};
+
+export default function DemoScreen() {
+  const route = useRoute<RouteProp<Record<string, DemoParams>, string>>();
+
+  const title = route.params?.title ?? 'Exemplo';
+  const description =
+    route.params?.description ?? 'Tela de demonstração';
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Minha primeira tela</Text>
-      <Text style={styles.description}>
-        Estou aprendendo React Navigation do zero!
-      </Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.description}>{description}</Text>
     </View>
   );
 }
@@ -122,12 +185,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 24,
   },
   title: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 12,
   },
@@ -138,836 +201,67 @@ const styles = StyleSheet.create({
 });
 ```
 
-### Entendendo o código
+Se o projeto já possui um `DemoScreen` funcional, confira sua implementação antes de substituí-lo, para não afetar os demais exemplos.
 
--   `View`: contêiner visual.
--   `Text`: apresenta texto.
--   `StyleSheet.create()`: organiza os estilos.
--   `flex: 1`: ocupa o espaço disponível.
--   `justifyContent: 'center'`: centraliza os elementos no eixo
-    principal.
--   `alignItems: 'center'`: centraliza os elementos no eixo transversal.
--   `export default`: permite importar a tela em outro arquivo.
+## 5. Integrar o exemplo à tela inicial
 
-## 6. Criar uma segunda tela
+No arquivo `App.tsx`, importe o navegador:
 
-Na mesma pasta `screens`, crie `DetailsScreen.tsx`:
+```tsx
+import TopTabsExample from './navigators/TopTabsExample';
 
-``` tsx
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function DetailsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tela de detalhes</Text>
-      <Text>Esta é a segunda tela do aplicativo.</Text>
-    </View>
-  );
+export default function App() {
+  return <TopTabsExample />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-});
 ```
 
-Agora temos duas telas, mas ainda precisamos conectá-las por meio de um
-navegador.
+Esse código abre diretamente o exemplo Top Tabs. Se você quiser manter a tela inicial com os seis exemplos, registre `TopTabsExample` no mecanismo de seleção de navegadores já existente, em vez de substituir a tela inicial.
 
-## Extra: dois exemplos com `styled-components`
+## 6. Executar o projeto
 
-O `StyleSheet` do React Native é uma opção válida para organizar estilos.
-Outra alternativa é o **styled-components**, que permite criar componentes
-visuais com estilos associados a eles. Os exemplos abaixo usam a versão
-para React Native, importada de `styled-components/native`.
-
-### Instalar a biblioteca
-
-Na pasta do projeto, execute:
+No terminal, execute:
 
 ```bash
-npm install styled-components
+npx expo start --web
 ```
 
-Se o projeto estiver usando uma versão do TypeScript que precise de tipos
-separados para a integração com React Native, consulte a documentação da
-versão instalada e adicione os tipos correspondentes. Depois da instalação,
-reinicie o servidor Expo se ele já estiver aberto.
+Se o servidor já estiver funcionando, pare-o com `Ctrl + C` antes de reiniciar.
 
-### Exemplo 1 — Criar uma tela estilizada
+Para limpar o cache e iniciar novamente:
 
-Crie `screens/StyledHomeScreen.tsx`:
-
-```tsx
-import styled from 'styled-components/native';
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-  background-color: #f3f6fb;
-`;
-
-const Title = styled.Text`
-  color: #172554;
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 12px;
-`;
-
-const Description = styled.Text`
-  color: #475569;
-  font-size: 16px;
-  text-align: center;
-`;
-
-export default function StyledHomeScreen() {
-  return (
-    <Container>
-      <Title>Olá, React Navigation!</Title>
-      <Description>
-        Esta tela usa styled-components para definir sua aparência.
-      </Description>
-    </Container>
-  );
-}
+```bash
+npx expo start --web --clear
 ```
 
-**O que observar:** em vez de criar um objeto com `StyleSheet.create`,
-criamos componentes como `Container`, `Title` e `Description`. As propriedades
-CSS são escritas em um bloco de texto, mas devem respeitar as propriedades
-suportadas pelo React Native — não todas as propriedades de CSS para web.
+## 7. Testar o resultado
 
-Para usar essa tela no Stack, importe o componente no arquivo `App.tsx` e
-adicione uma rota ao tipo de rotas e ao navegador, por exemplo:
+Verifique os seguintes comportamentos:
 
-```tsx
-// No tipo RootStackParamList:
-TelaEstilizada: undefined;
+- [ ] A aplicação abre sem erros.
+- [ ] As abas Início, Produção e Mercado aparecem na parte superior.
+- [ ] A aba selecionada fica visualmente destacada.
+- [ ] Ao clicar em outra aba, o conteúdo da tela muda.
+- [ ] O título e a descrição correspondem à aba selecionada.
+- [ ] A navegação também funciona ao testar no dispositivo móvel compatível.
 
-// Junto aos imports:
-import StyledHomeScreen from './screens/StyledHomeScreen';
+## 8. Compreender o código
 
-// Dentro de Stack.Navigator:
-<Stack.Screen
-  name="TelaEstilizada"
-  component={StyledHomeScreen}
-  options={{ title: 'Tela estilizada' }}
-/>
-```
+| Elemento | Função |
+|---|---|
+| `NavigationContainer` | Gerencia o estado da navegação. |
+| `createMaterialTopTabNavigator()` | Cria o navegador de abas superiores. |
+| `Tab.Navigator` | Define e configura o conjunto de abas. |
+| `Tab.Screen` | Registra cada tela navegável. |
+| `component={DemoScreen}` | Define o componente exibido em cada aba. |
+| `initialParams` | Fornece parâmetros iniciais para a tela. |
+| `screenOptions` | Personaliza a aparência das abas. |
 
-### Exemplo 2 — Criar um cartão reutilizável e um botão
+## 9. Desafio para os estudantes
 
-Crie `components/InfoCard.tsx` (crie a pasta `components` caso ainda não
-exista):
+Modifique o exemplo para criar três abas:
 
-```tsx
-import styled from 'styled-components/native';
+1. **Propriedades:** exibe o nome de uma propriedade rural.
+2. **Produção:** apresenta a quantidade de sacas de café produzidas.
+3. **Mercado:** apresenta o preço fictício da saca de café.
 
-type CardProps = {
-  destaque?: boolean;
-};
-
-const Card = styled.View<CardProps>`
-  padding: 20px;
-  margin: 16px;
-  border-radius: 12px;
-  background-color: ${({ destaque }) =>
-    destaque ? '#dbeafe' : '#ffffff'};
-  border-width: 1px;
-  border-color: ${({ destaque }) =>
-    destaque ? '#2563eb' : '#cbd5e1'};
-`;
-
-const CardTitle = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: #0f172a;
-  margin-bottom: 8px;
-`;
-
-const CardDescription = styled.Text`
-  font-size: 14px;
-  color: #475569;
-  margin-bottom: 16px;
-`;
-
-const ActionButton = styled.Pressable`
-  background-color: #2563eb;
-  padding: 12px;
-  border-radius: 8px;
-  align-items: center;
-`;
-
-const ActionButtonText = styled.Text`
-  color: #ffffff;
-  font-weight: bold;
-`;
-
-type InfoCardProps = {
-  title: string;
-  description: string;
-  destaque?: boolean;
-  onPress: () => void;
-};
-
-export default function InfoCard({
-  title,
-  description,
-  destaque = false,
-  onPress,
-}: InfoCardProps) {
-  return (
-    <Card destaque={destaque}>
-      <CardTitle>{title}</CardTitle>
-      <CardDescription>{description}</CardDescription>
-      <ActionButton onPress={onPress} accessibilityRole="button">
-        <ActionButtonText>Abrir detalhes</ActionButtonText>
-      </ActionButton>
-    </Card>
-  );
-}
-```
-
-Agora use o cartão em uma tela, por exemplo em `screens/DetailsScreen.tsx`:
-
-```tsx
-import { Alert, ScrollView } from 'react-native';
-import InfoCard from '../components/InfoCard';
-
-export default function DetailsScreen() {
-  return (
-    <ScrollView>
-      <InfoCard
-        title="React Navigation"
-        description="Organize o aplicativo em telas e rotas."
-        destaque
-        onPress={() => Alert.alert('Detalhes', 'Você pressionou o botão!')}
-      />
-
-      <InfoCard
-        title="Styled-components"
-        description="Reutilize componentes visuais em diferentes telas."
-        onPress={() => Alert.alert('Estilos', 'Este cartão não está destacado.')}
-      />
-    </ScrollView>
-  );
-}
-```
-
-**O que observar:**
-
-- `Card`, `CardTitle` e `ActionButton` são componentes reutilizáveis.
-- A propriedade `destaque` altera dinamicamente a cor de fundo e a borda.
-- `onPress` permite que a tela que usa o cartão decida o que acontece ao
-  pressionar o botão.
-- `Alert.alert` é apenas uma demonstração; você também pode passar uma
-  função que usa `navigation.navigate(...)` para abrir outra rota.
-
-------------------------------------------------------------------------
-
-# Parte 3 --- Construir Native Stack
-
-## 7. Configurar as rotas no `App.tsx`
-
-Abra `App.tsx`, substitua seu conteúdo por:
-
-``` tsx
-import { NavigationContainer } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  type NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-
-import { View, Text, Button, StyleSheet } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/DetailsScreen';
-
-type RootStackParamList = {
-  Inicio: undefined;
-  Detalhes: undefined;
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Inicio'>;
-
-function HomeWithButton({ navigation }: HomeProps) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Minha primeira tela</Text>
-      <Text>Esta é a tela inicial do aplicativo.</Text>
-      <Button
-        title="Abrir detalhes"
-        onPress={() => navigation.navigate('Detalhes')}
-      />
-    </View>
-  );
-}
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Inicio"
-          component={HomeWithButton}
-          options={{ title: 'Página inicial' }}
-        />
-
-        <Stack.Screen
-          name="Detalhes"
-          component={DetailsScreen}
-          options={{ title: 'Detalhes' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-    gap: 16,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-});
-```
-
-### O que cada parte faz?
-
--   `NavigationContainer`: gerencia o estado de navegação.
--   `createNativeStackNavigator`: cria um navegador em pilha.
--   `Stack.Navigator`: agrupa as rotas da pilha.
--   `Stack.Screen`: registra uma rota e o componente a ser exibido.
--   `name`: identifica a rota.
--   `component`: define o componente da tela.
--   `options.title`: define o título do cabeçalho.
--   `navigation.navigate('Detalhes')`: abre a rota `Detalhes`.
-
-`RootStackParamList` informa ao TypeScript quais rotas existem e quais
-parâmetros aceitam. Aqui, `undefined` significa que a rota não precisa
-receber parâmetros.
-
-## 8. Executar o aplicativo
-
-Execute:
-
-``` bash
-npx expo start
-```
-
-Siga as instruções exibidas pelo Expo para abrir o aplicativo em um
-dispositivo ou emulador. Toque em **Abrir detalhes**. O cabeçalho deve
-permitir voltar para a tela anterior quando houver uma rota anterior na
-pilha.
-
-Documentação: [Native Stack
-Navigator](https://reactnavigation.org/docs/native-stack-navigator/).
-
-------------------------------------------------------------------------
-
-# Parte 4 --- Criar telas reutilizáveis
-
-Para os exemplos de abas e menu lateral, vamos criar telas simples.
-
-## 9. Criar `ProductionScreen.tsx`
-
-Em `screens/ProductionScreen.tsx`:
-
-``` tsx
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function ProductionScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Produção</Text>
-      <Text>Esta é a área de produção.</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-});
-```
-
-## 10. Criar `ProfileScreen.tsx`
-
-Em `screens/ProfileScreen.tsx`:
-
-``` tsx
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function ProfileScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Perfil</Text>
-      <Text>Esta é a área do perfil.</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-});
-```
-
-## 11. Criar `DataScreen.tsx`
-
-Em `screens/DataScreen.tsx`:
-
-``` tsx
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function DataScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dados</Text>
-      <Text>Informações detalhadas do aplicativo.</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-});
-```
-
-## 12. Criar `AboutScreen.tsx`
-
-Em `screens/AboutScreen.tsx`:
-
-``` tsx
-import { View, Text, StyleSheet } from 'react-native';
-
-export default function AboutScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sobre</Text>
-      <Text>Aplicativo desenvolvido para a aula.</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-});
-```
-
-------------------------------------------------------------------------
-
-# Parte 5 --- Construir Bottom Tabs
-
-## 13. Instalar a biblioteca
-
-``` bash
-npm install @react-navigation/bottom-tabs
-```
-
-## 14. Criar `navigators/BottomTabsNavigator.tsx`
-
-Crie a pasta `navigators` e o arquivo `BottomTabsNavigator.tsx`:
-
-``` tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import HomeScreen from '../screens/HomeScreen';
-import ProductionScreen from '../screens/ProductionScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-type TabParamList = {
-  Inicio: undefined;
-  Producao: undefined;
-  Perfil: undefined;
-};
-
-const Tab = createBottomTabNavigator<TabParamList>();
-
-export default function BottomTabsNavigator() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: true,
-          tabBarActiveTintColor: '#1565C0',
-          tabBarInactiveTintColor: '#777777',
-        }}
-      >
-        <Tab.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{ title: 'Início' }}
-        />
-
-        <Tab.Screen
-          name="Producao"
-          component={ProductionScreen}
-          options={{ title: 'Produção' }}
-        />
-
-        <Tab.Screen
-          name="Perfil"
-          component={ProfileScreen}
-          options={{ title: 'Perfil' }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-```
-
-### Entenda a construção
-
-1.  `createBottomTabNavigator()` cria o navegador de abas inferiores.
-2.  `Tab.Navigator` define a barra de abas.
-3.  Cada `Tab.Screen` registra uma aba.
-4.  `name` é o identificador da rota.
-5.  `component` aponta para o componente que será exibido.
-6.  `options.title` define o título apresentado no cabeçalho.
-
-## 15. Testar Bottom Tabs
-
-Para testar esse navegador isoladamente, substitua temporariamente o
-conteúdo de `App.tsx` por:
-
-``` tsx
-import BottomTabsNavigator from './navigators/BottomTabsNavigator';
-
-export default function App() {
-  return <BottomTabsNavigator />;
-}
-```
-
-Salve e observe as abas Início, Produção e Perfil.
-
-Documentação: [Bottom Tabs
-Navigator](https://reactnavigation.org/docs/bottom-tab-navigator/).
-
-------------------------------------------------------------------------
-
-# Parte 6 --- Construir Top Tabs
-
-## 16. Instalar as bibliotecas
-
-``` bash
-npm install @react-navigation/material-top-tabs
-npx expo install react-native-pager-view
-```
-
-## 17. Criar `navigators/TopTabsNavigator.tsx`
-
-``` tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
-import HomeScreen from '../screens/HomeScreen';
-import DataScreen from '../screens/DataScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-const Tab = createMaterialTopTabNavigator();
-
-export default function TopTabsNavigator() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarIndicatorStyle: {
-            backgroundColor: '#1565C0',
-            height: 3,
-          },
-          tabBarLabelStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <Tab.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{ title: 'Início' }}
-        />
-
-        <Tab.Screen
-          name="Dados"
-          component={DataScreen}
-        />
-
-        <Tab.Screen
-          name="Perfil"
-          component={ProfileScreen}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-```
-
-Para testar, altere temporariamente `App.tsx`:
-
-``` tsx
-import TopTabsNavigator from './navigators/TopTabsNavigator';
-
-export default function App() {
-  return <TopTabsNavigator />;
-}
-```
-
-Agora as abas aparecem na parte superior. Dependendo da configuração,
-também é possível trocar de página deslizando horizontalmente.
-
-Documentação: [Material Top Tabs
-Navigator](https://reactnavigation.org/docs/material-top-tab-navigator/).
-
-------------------------------------------------------------------------
-
-# Parte 7 --- Construir Drawer
-
-## 18. Instalar o Drawer e suas dependências
-
-``` bash
-npm install @react-navigation/drawer
-npx expo install react-native-gesture-handler react-native-reanimated
-```
-
-Confira a documentação de instalação do React Navigation e do Expo para
-confirmar os requisitos da versão instalada.
-
-## 19. Criar `navigators/DrawerNavigator.tsx`
-
-``` tsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-
-import HomeScreen from '../screens/HomeScreen';
-import ProductionScreen from '../screens/ProductionScreen';
-import AboutScreen from '../screens/AboutScreen';
-
-const Drawer = createDrawerNavigator();
-
-export default function DrawerNavigator() {
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen
-          name="Inicio"
-          component={HomeScreen}
-          options={{ title: 'Início' }}
-        />
-
-        <Drawer.Screen
-          name="Producao"
-          component={ProductionScreen}
-          options={{ title: 'Produção' }}
-        />
-
-        <Drawer.Screen
-          name="Sobre"
-          component={AboutScreen}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
-}
-```
-
-Para testar, altere temporariamente `App.tsx`:
-
-``` tsx
-import DrawerNavigator from './navigators/DrawerNavigator';
-
-export default function App() {
-  return <DrawerNavigator />;
-}
-```
-
-Abra o menu lateral e selecione as opções.
-
-Documentação: [Drawer
-Navigator](https://reactnavigation.org/docs/drawer-navigator/).
-
-------------------------------------------------------------------------
-
-# Parte 8 --- Native Bottom Tabs
-
-## 20. Entender a diferença
-
-Bottom Tabs e Native Bottom Tabs não são necessariamente o mesmo
-navegador. A versão comum utiliza `@react-navigation/bottom-tabs`. O
-navegador nativo depende da API e dos requisitos de versão
-disponibilizados pela documentação oficial.
-
-Antes de instalar ou alterar o projeto:
-
-1.  confira a versão do React Navigation;
-2.  consulte [Native Bottom
-    Tabs](https://reactnavigation.org/docs/native-bottom-tab-navigator/);
-3.  confirme os requisitos do Expo SDK, React Native e
-    `react-native-screens`;
-4.  verifique se o ambiente de execução suporta o navegador escolhido.
-
-Não basta importar `createNativeBottomTabNavigator` e depois instanciar
-`createBottomTabNavigator`: isso continuaria criando o navegador
-JavaScript. Também não presuma que um módulo nativo estará disponível no
-Expo Go; alguns cenários exigem um development build.
-
-------------------------------------------------------------------------
-
-# Parte 9 --- Como organizar vários exemplos no mesmo aplicativo
-
-Até aqui, substituímos temporariamente `App.tsx` para testar um
-navegador por vez. Isso é didático no início, mas não é ideal para uma
-demonstração completa.
-
-Quando vários navegadores forem integrados em um aplicativo, o
-recomendado é ter um único `NavigationContainer` na raiz e organizar os
-fluxos usando navegadores aninhados ou um navegador principal. Não
-coloque um `NavigationContainer` dentro de cada tela quando todos fazem
-parte da mesma árvore de navegação.
-
-Uma boa sequência de desenvolvimento é:
-
-1.  implementar e testar cada navegador isoladamente;
-2.  confirmar que as rotas e as telas funcionam;
-3.  aprender como navegadores podem ser aninhados;
-4.  montar um menu inicial que permita escolher os exemplos;
-5.  testar novamente o fluxo completo.
-
-------------------------------------------------------------------------
-
-# Parte 10 --- Erros comuns
-
-## Erro: módulo não encontrado
-
-Confira se a biblioteca foi instalada na pasta que contém
-`package.json`. Para dependências nativas, use `npx expo install` quando
-recomendado pela documentação.
-
-## Erro: tela não abre
-
-Verifique se a rota foi registrada e se o nome usado em
-`navigation.navigate('Detalhes')` corresponde exatamente ao nome em
-`Screen`.
-
-## Erro de TypeScript na navegação
-
-Confira se o tipo das rotas corresponde ao nome do navegador e se os
-parâmetros obrigatórios foram declarados corretamente.
-
-## Abas não aparecem
-
-Confirme que o navegador usa o componente correto, como `Tab.Navigator`,
-e que suas telas estão registradas com `Tab.Screen`.
-
-## Erro ao usar Drawer ou Top Tabs
-
-Confira os requisitos de instalação das dependências nativas e as
-versões compatíveis com o Expo SDK do projeto.
-
-------------------------------------------------------------------------
-
-# Parte 11 --- Exercícios para os alunos
-
-1.  Altere o título da tela inicial.
-2.  Crie uma terceira tela chamada `SettingsScreen.tsx`.
-3.  Adicione uma rota para Configurações no Bottom Tabs.
-4.  Mude a cor da aba ativa.
-5.  Adicione uma aba no Top Tabs.
-6.  Adicione uma opção chamada Ajuda ao Drawer.
-7.  Crie um botão em Stack para navegar até a tela de detalhes.
-8.  Explique a função de `NavigationContainer`, `Navigator` e `Screen`.
-9.  Explique a diferença entre Stack e Native Stack.
-10. Pesquise os requisitos necessários para Native Bottom Tabs no
-    ambiente usado na aula.
-
-------------------------------------------------------------------------
-
-# Resumo
-
-  -----------------------------------------------------------------------
-  Navegador               Organização             Uso comum
-  ----------------------- ----------------------- -----------------------
-  Native Stack            Pilha de telas          Detalhes, formulários e
-                                                  etapas
-
-  Bottom Tabs             Abas inferiores         Seções principais
-                                                  acessadas
-                                                  frequentemente
-
-  Top Tabs                Abas superiores         Categorias relacionadas
-
-  Drawer                  Menu lateral            Aplicativos com várias
-                                                  áreas
-
-  Native Bottom Tabs      Abas inferiores nativas Quando a implementação
-                                                  nativa é necessária e
-                                                  suportada
-  -----------------------------------------------------------------------
-
-## Documentação oficial
-
--   [Criar um projeto
-    Expo](https://docs.expo.dev/get-started/create-a-project/)
--   [React Navigation --- Getting
-    Started](https://reactnavigation.org/docs/getting-started/)
--   [Native
-    Stack](https://reactnavigation.org/docs/native-stack-navigator/)
--   [Bottom
-    Tabs](https://reactnavigation.org/docs/bottom-tab-navigator/)
--   [Material Top
-    Tabs](https://reactnavigation.org/docs/material-top-tab-navigator/)
--   [Drawer](https://reactnavigation.org/docs/drawer-navigator/)
--   [Native Bottom
-    Tabs](https://reactnavigation.org/docs/native-bottom-tab-navigator/)
+Personalize as cores, os títulos e as descrições. Depois, explique a diferença entre navegar por abas superiores e navegar por uma pilha de telas com Stack Navigator.
